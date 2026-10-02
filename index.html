@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis 15 Años - Graciela</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff}
+body{overflow-x:hidden;font-family:Georgia,serif}
+#sobre{position:fixed;inset:0;z-index:20;background:#fff;display:flex;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease}
+.cover{position:relative;width:min(100vw,620px);height:auto;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cover img{display:block;width:100%;height:auto}
+.open-button{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);padding:12px 28px;border:0;border-radius:30px;background:#b75a48;color:#fff;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.16);cursor:pointer}
+#sobre.open{opacity:0;visibility:hidden;pointer-events:none}
+#invitacion{opacity:0;transition:opacity .8s ease;display:flex;justify-content:center}
+#invitacion.visible{opacity:1}
+.invitation-page{position:relative;width:min(100vw,728px);line-height:0}
+.invitation-page img{display:block;width:100%;height:auto}
+#contador{position:absolute;left:23.5%;top:34.1%;width:53%;height:5.8%;display:grid;grid-template-columns:repeat(4,1fr);gap:2%;z-index:3;pointer-events:none}
+#contador .unidad{background:rgba(255,255,255,.96);border:1px solid rgba(222,174,184,.65);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
+#contador strong{font-family:Arial,sans-serif;font-size:clamp(16px,3.4vw,28px);font-weight:500;color:#a64f69}
+#contador span{font-family:Arial,sans-serif;font-size:clamp(7px,1.25vw,10px);letter-spacing:.4px;color:#a97882;margin-top:4px}
+.hotspot{position:absolute;display:block;cursor:pointer;background:transparent;border:0;padding:0;z-index:5}
+#btn-ver{left:43%;top:18.1%;width:17%;height:2.2%}
+#btn-musica{left:44%;top:23.6%;width:12%;height:4%}
+#btn-ubicacion{left:41%;top:70.8%;width:19%;height:2.2%}
+#btn-confirmar{left:64%;top:91.8%;width:27%;height:2.4%}
+#estado-musica{position:absolute;left:30%;top:27.4%;width:40%;text-align:center;font-family:Arial,sans-serif;font-size:10px;color:#8f6b67;line-height:1.2;pointer-events:none;z-index:4;opacity:.8}
+audio{display:none}
+</style>
+</head>
+<body>
+<section id="sobre" aria-label="Abrir invitación">
+  <div class="cover" id="abrir">
+    <img src="sobre.png" alt="Sobre personalizado de los 15 años de Graciela">
+    <button class="open-button" type="button">Abrir invitación</button>
+  </div>
+</section>
+
+<main id="invitacion">
+  <div class="invitation-page">
+    <img src="invitacion.png" alt="Invitación de 15 años de Graciela">
+
+    <div id="contador" aria-label="Cuenta regresiva para los 15 años de Graciela">
+      <div class="unidad"><strong id="dias">00</strong><span>DÍAS</span></div>
+      <div class="unidad"><strong id="horas">00</strong><span>HORAS</span></div>
+      <div class="unidad"><strong id="minutos">00</strong><span>MINUTOS</span></div>
+      <div class="unidad"><strong id="segundos">00</strong><span>SEGUNDOS</span></div>
+    </div>
+
+    <a id="btn-ver" class="hotspot" href="#invitacion" aria-label="Ver invitación"></a>
+    <button id="btn-musica" class="hotspot" type="button" aria-label="Reproducir o pausar la canción"></button>
+    <div id="estado-musica">Toca ▶ para reproducir la canción</div>
+
+    <a id="btn-ubicacion" class="hotspot"
+       href="https://www.google.com/maps/search/?api=1&query=Salones+Roma+Cajamarca"
+       target="_blank" rel="noopener" aria-label="Ver ubicación"></a>
+
+    <a id="btn-confirmar" class="hotspot"
+       href="https://wa.me/51952388205?text=Hola%2C%20Soy....%20confirmo%20mi%20asistencia%20para%20el%2015%20a%C3%B1os%20de%20Graciela."
+       target="_blank" rel="noopener" aria-label="Confirmar asistencia"></a>
+  </div>
+</main>
+
+<audio id="musica" preload="auto" loop>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const sobre=document.getElementById('sobre');
+const invitacion=document.getElementById('invitacion');
+const abrir=document.getElementById('abrir');
+const musica=document.getElementById('musica');
+const btnMusica=document.getElementById('btn-musica');
+const estado=document.getElementById('estado-musica');
+
+abrir.addEventListener('click',()=>{
+  sobre.classList.add('open');
+  setTimeout(()=>invitacion.classList.add('visible'),350);
+});
+
+document.getElementById('btn-ver').addEventListener('click',e=>{
+  e.preventDefault();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+const fechaEvento=new Date(2026,9,18,12,0,0);
+function actualizarCuenta(){
+  let d=fechaEvento-new Date();
+  if(d<0)d=0;
+  const dias=Math.floor(d/86400000);
+  const horas=Math.floor((d%86400000)/3600000);
+  const minutos=Math.floor((d%3600000)/60000);
+  const segundos=Math.floor((d%60000)/1000);
+  document.getElementById('dias').textContent=String(dias).padStart(2,'0');
+  document.getElementById('horas').textContent=String(horas).padStart(2,'0');
+  document.getElementById('minutos').textContent=String(minutos).padStart(2,'0');
+  document.getElementById('segundos').textContent=String(segundos).padStart(2,'0');
+}
+actualizarCuenta(); setInterval(actualizarCuenta,1000);
+
+btnMusica.addEventListener('click',async()=>{
+  if(musica.paused){
+    try{
+      await musica.play();
+      estado.textContent='♫ Reproduciendo';
+    }catch(e){
+      estado.textContent='No se pudo reproducir la canción';
+    }
+  }else{
+    musica.pause();
+    estado.textContent='Toca ▶ para reproducir la canción';
+  }
+});
+</script>
+</body>
+</html>
